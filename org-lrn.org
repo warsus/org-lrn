@@ -1,0 +1,8 @@
+* DONE Only ask scheduled entrys
+CLOSED: [2011-08-07 Sun 18:48]
+* TODO elnode webfrontend for asking questions
+* TODO 
+run custom provided function on loading entry
+example: run org-preview-latex (or arbitrary code) on every entry 
+
+* TODO nested learn items
