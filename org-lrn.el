@@ -30,31 +30,109 @@
 
 ;;TODO:Skip if not scheduled
 (defun org-lrn-entry ()
-  (org-tree-to-indirect-buffer)
-  (pop-to-buffer org-last-indirect-buffer)
+  (setq org-lrn-buffer (pop-to-buffer))
+  (org-narrow-to-subtree)
+  ;;(pop-to-buffer org-last-indirect-buffer)
   ;;TODO not equal zero
   (when (not (eq 0 (org-lrn-check-scheduled)))
     (save-excursion (org-lrn-action))
     (org-lrn-update-entry (read-from-minibuffer "Rating: ")))
-  (kill-buffer-and-window)
+  (widen)
+  ;;(kill-buffer-and-window)
   )
+
+(defun org-lrn-init-function ()
+  (org-preview-latex-fragment)
+)
+
+(defun org-lrn-entry-web ()
+  (interactive)
+  (setq org-lrn-buffer (pop-to-buffer))
+  (org-narrow-to-subtree)
+  ;;TODO not equal zero
+  ;;(read-char-exclusive)
+  (when (not (eq 0 (org-lrn-check-scheduled)))
+    ;;(save-excursion (org-lrn-action))
+    (org-lrn-update-entry (read-from-web )))
+  (widen)
+  ;;(kill-buffer-and-window
+)
+
+(setq org-lrn-rating nil)
+
+;;TODO: poll variable set in elnode till it's not nil return the value set it to nil
+(defun read-from-web ()
+  ;;TODO loops to fast
+  (while (eq org-lrn-rating nil)
+    (sleep-for 5))
+  
+  (setq org-lrn-temp-rating org-lrn-rating)
+  (setq org-lrn-rating nil)
+  org-lrn-temp-rating
+  ;;5
+)
+
+;;TODO: remove this 
+(setq org-lrn-buffer (get-buffer "lrn.lrn"))
+;;TODO: buffer
+(defun org-lrn-expose (httpcon)
+  (org-export-as-xoxo org-lrn-buffer)
+  (elnode-http-start httpcon 200 '(("Content-type" . "text/html")))
+  (elnode-http-return 
+   httpcon
+   (format "<html>%s</html>" 
+           (with-current-buffer (get-buffer "lrn.html")
+             (buffer-substring-no-properties (point-min) (point-max))))))
+(setq debug-on-error 1)
+
+;;TODO setq 
+(defun org-rating (httpcon)
+    (let ((params (elnode-http-params httpcon)))
+      (elnode-http-start httpcon 200 '("Content-type" . "text/html"))
+      (elnode-http-return 
+       httpcon 
+       (setq org-lrn-rating params)
+       )
+      )
+    )
+
+(elnode-start 'org-lrn-expose 8007 "localhost")
 
 (defun org-lrn-action ()
   (org-occur "* Q")
   (next-error)
   (org-cycle)
-  (read-from-minibuffer "Proceed to answer? Press any key.")
+  (org-lrn-init-function)
+  (read-char-exclusive)
   (org-set-startup-visibility)
   (org-occur "* A")
   (next-error)
+  (org-lrn-init-function)
   (org-cycle))
 
-(defun org-lrn-entries ()
+(defun org-lrn-do (f)
   (interactive) 
   (length (org-map-entries 
-   'org-lrn-entry
+   f
    "/+LEARN"
    'agenda)))
+
+(defun org-lrn-entries ()
+  (interactive)
+  (org-lrn-do 'org-lrn-entry))
+
+(defun org-lrn-entries-web ()
+  (interactive)
+  (org-lrn-do 'org-lrn-entry-web))
+
+(defun org-lrn-entry-export ()
+  (interactive)
+;;  (org-export-visible)
+  (org-export-as-html 3))
+
+(defun org-lrn-export ()
+  (interactive)
+  (org-lrn-do 'org-lrn-entry-export))
 
 ;;TODO:replace occur with other function
 ;;TODO:check only current heading instead of doing a regexp search
@@ -80,4 +158,5 @@
   (save-excursion
     (org-lrn-check-before-date (org-read-date nil nil "+1"))))
 
-(provide 'org-lrn-mode)
+;;C-c C-e v
+(provide 'org-lrn)
