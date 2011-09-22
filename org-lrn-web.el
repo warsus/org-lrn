@@ -34,7 +34,6 @@
    (format "<html>%s</html>" 
            (with-current-buffer (get-buffer "lrn.html")
              (buffer-substring-no-properties (point-min) (point-max))))))
-(setq debug-on-error 1)
 
 ;;TODO setq 
 (defun org-rating (httpcon)
