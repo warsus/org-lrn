@@ -1,0 +1,23 @@
+;;Example configuration for capturing lrn entries
+;;you can either call it and then specify the word in the template or use the wrapper function org-lrn-word to directly specify the word, for example if you stumble upon a word in a textfile. 
+
+(setq org-lrn-temp-word nil)
+
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline (concat org-directory "refile.org") "Tasks")
+	 "* TODO %?\n  %i\n  %a")
+        ("l" "Learn" entry (file+headline (concat org-directory "refile.lrn") "Learn Refile")
+	 "* LEARN %^{Title} %^g\nSCHEDULED: %^t\n:PROPERTIES: \n:EFactor: 2.5 \n:Schedule: 1 \n:END:\n %i\n  %a \n** Q\n %?\n** A")
+        ("w" "Learn Word" entry (file+headline (concat org-directory "refile.lrn") "Learn Refile")
+	 "* LEARN %(or org-lrn-temp-word (org-lrn-word-set)) %^g\nSCHEDULED: %^t\n:PROPERTIES: \n:EFactor: 2.5 \n:Schedule: 1 \n:END:\n %i\n  %a \n** Q\n %?\n** A\n %(org-lrn-definition (or org-lrn-temp-word org-lrn-state-word)))")))
+
+;;TODO: Interactive prompt with default value of word at point.
+(defun org-lrn-word (org-lrn-temp-word)
+  (org-capture nil "w"))
+
+(defun org-lrn-definition (word)
+  (shell-command-to-string (concat "dict " word)))
+
+(defun org-lrn-word-set ()
+  (setq org-lrn-state-word (read-from-minibuffer "Word:"))
+  org-lrn-state-word)

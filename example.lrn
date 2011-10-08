@@ -1,0 +1,19 @@
+* Learn
+** LEARN Distributivgesetz (bare entry) :math:
+*** Q
+What is?
+*** A
+\begin{equation}
+a * (b+c) = (a*b) + (a*c)
+\end{equation}
+** LEARN Assoziativgesetz (initializied entry) :math:
+SCHEDULED: <2011-10-09 Sun>
+:PROPERTIES:
+:EFactor: 2.5
+:Schedule: 1
+:END:
+*** Q
+What is?
+*** A
+$(a+b)+c=a+(b+c)$
+

@@ -1,20 +1,20 @@
 * Introduction
 This is similar to Anki or Mnemosyne.
-Advanteges are you stay in emacs.
-Entries are text so we can have decks as files, so we have decks in versioncontrol, which i think is a very good thing.
-Because it makes sharing and collaborating on decks easy.
+Advantages are you stay in emacs.
+Entries are text so we can have decks as files, so we have decks in versioncontrol, which i think is a very good thing, because it makes sharing and collaborating on decks easy.
+
 * Setup
   - Add learn keyword to your todo-keywords e.g.
     (setq org-todo-keywords     
         '((sequence "TODO" "LEARN" "|" "DONE")))
-  - Add learn template to your capture-templates e.g.
-    (setq org-capture-templates
-      '(("l" "Learn" entry (file+headline (concat org-directory "refile.lrn") "Learn")
-	 "* LEARN %^{Title} %^g\nSCHEDULED: %^t\n:PROPERTIES: \n:EFactor: 2.5 \n:Schedule: 1 \n:END:\n %i\n  %a \n** Q\n %?\n** A")))
-  - Add your learn files to your agenda-files e.g.
-    (setq org-agenda-files (list ((concat org-directory "refile.lrn"))))
-* Usage
-  Run the interactive command org-lrn-entries.
+  -  (setq org-agenda-files (list ((concat org-directory "refile.lrn"))))
+See also config.el.example for setup for using org-cature with org-lrn.
+    
+* Functions
+org-lrn-entries: Learn all scheduled entries
+org-lrn-file: Learn all scheduled entries in file
+org-lrn-entry: Init entry at point (add properties and schedules).
+org-lrn-init-file: Init all entries in a file. 
  
 * TODO Future
 A webfrontend would be useful for some media heavy stuff (pictures, videos) and could be made using elnode.
