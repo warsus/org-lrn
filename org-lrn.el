@@ -58,17 +58,33 @@
   (org-lrn-init-function)
   (org-cycle))
 
-(defun org-lrn-do (f)
+(defun org-lrn-do (f tagstring scope)
   (interactive) 
   (length (org-map-entries 
    f
-   "/+LEARN"
-   'agenda)))
+   tagstring;;   
+   scope)))
 
 (defun org-lrn-entries ()
   (interactive)
-  (org-lrn-do 'org-lrn-entry))
+  (org-lrn-do 'org-lrn-entry "/+LEARN" 'agenda))
 
+(defun org-lrn-entries-with-tags (tagstring)
+  (org-lrn-do 'org-lrn-entry tagstring))
+
+(defun org-lrn-current-file ()
+  (org-lrn-do 'org-lrn-entry "/+LEARN" 'file))
+
+(defun org-lrn-init-file ()
+  (interactive)
+  (org-lrn-do 'org-lrn-init-entry "/+LEARN" 'file))
+
+(defun org-lrn-init-entry ()
+  (interactive)
+  (org-schedule nil "+1")
+  (org-entry-put (point) "EFactor" "2.5")
+  (org-entry-put (point) "Schedule" "1"))
+  
 ;;TODO:replace occur with other function
 ;;TODO:check only current heading instead of doing a regexp search
 (defun org-lrn-check-before-date (date)
@@ -95,3 +111,20 @@
 
 ;;C-c C-e v
 (provide 'org-lrn)
+
+(setq org-lrn-file "~/text/org/refile.lrn")
+
+;;(defun org-lrn-bare-entry (title)
+(defun org-lrn-bare-entry ()
+  (interactive)
+    (save-excursion
+      (find-file org-lrn-file)
+      (org-insert-heading)
+      ;; (org-insert-subheading nil)
+      ;; (insert "Q")
+      ;; (org-insert-heading)
+      ;; (insert "A")
+))
+
+
+
