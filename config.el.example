@@ -13,6 +13,12 @@
 
 ;;TODO: Interactive prompt with default value of word at point.
 (defun org-lrn-word (org-lrn-temp-word)
+  (interactive 
+   (let* ((word (word-at-point))
+          (input (read-from-minibuffer (format "Word (default %s): " word))))
+     (if (equal input "")
+       (list (format "%s" word))
+       (list input))))
   (org-capture nil "w"))
 
 (defun org-lrn-definition (word)
