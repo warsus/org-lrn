@@ -15,7 +15,7 @@ org-lrn-entries: Learn all scheduled entries
 org-lrn-file: Learn all scheduled entries in file
 org-lrn-entry: Init entry at point (add properties and schedules).
 org-lrn-init-file: Init all entries in a file. 
- 
+
 * TODO Future
 A webfrontend would be useful for some media heavy stuff (pictures, videos) and could be made using elnode.
 

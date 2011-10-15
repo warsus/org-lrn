@@ -30,7 +30,7 @@
 
 ;;TODO:Skip if not scheduled
 (defun org-lrn-entry ()
-  (setq org-lrn-buffer (pop-to-buffer))
+  (setq org-lrn-buffer (pop-to-buffer (current-buffer)))
   (org-narrow-to-subtree)
   ;;(pop-to-buffer org-last-indirect-buffer)
   ;;TODO not equal zero
@@ -45,15 +45,15 @@
   (org-preview-latex-fragment)
 )
 
-
 (defun org-lrn-action ()
-  (org-occur "* Q")
+  (org-occur "*\\( [[:alnum:]]*\\)? Q")
   (next-error)
   (org-cycle)
   (org-lrn-init-function)
   (read-char-exclusive)
   (org-set-startup-visibility)
-  (org-occur "* A")
+;;  (widen)
+  (org-occur "*\\( [[:alnum:]]*\\)? A")
   (next-error)
   (org-lrn-init-function)
   (org-cycle))
@@ -75,16 +75,16 @@
 (defun org-lrn-current-file ()
   (org-lrn-do 'org-lrn-entry "/+LEARN" 'file))
 
-(defun org-lrn-init-file ()
-  (interactive)
-  (org-lrn-do 'org-lrn-init-entry "/+LEARN" 'file))
-
 (defun org-lrn-init-entry ()
   (interactive)
   (org-schedule nil "+1")
   (org-entry-put (point) "EFactor" "2.5")
   (org-entry-put (point) "Schedule" "1"))
-  
+
+(defun org-lrn-init-file ()
+  (interactive)
+  (org-lrn-do 'org-lrn-init-entry "/+LEARN" 'file))
+
 ;;TODO:replace occur with other function
 ;;TODO:check only current heading instead of doing a regexp search
 (defun org-lrn-check-before-date (date)
